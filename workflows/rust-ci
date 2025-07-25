@@ -1,0 +1,103 @@
+name: Rust CI (stable + nightly)
+
+on:
+  workflow_dispatch:
+  workflow_call:
+
+jobs:
+  stable-ci:
+    name: Check with stable
+    runs-on: ubuntu-latest
+    env:
+      CARGO_TARGET_DIR: target/stable
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/cache@v3
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            target/stable
+          key: ${{ runner.os }}-cargo-stable-${{ hashFiles('**/Cargo.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-cargo-stable-
+
+      - uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          default: true
+          components: clippy, rustfmt
+
+      - name: Format Check
+        run: cargo fmt --check
+
+      - name: Clippy Lint
+        run: cargo clippy -- -D warnings
+
+      - name: Doctest
+        run: cargo test --doc
+
+      - name: Debug Build
+        run: cargo build
+
+      - name: Unit Tests
+        run: cargo test
+
+      - name: Rustdoc
+        run: cargo doc --no-deps
+
+  nightly-ci:
+    name: Extra tests with nightly
+    runs-on: ubuntu-latest
+    env:
+      CARGO_TARGET_DIR: target/nightly
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/cache@v3
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            target/nightly
+          key: ${{ runner.os }}-cargo-nightly-${{ hashFiles('**/Cargo.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-cargo-nightly-
+
+      - uses: actions-rs/toolchain@v1
+        with:
+          toolchain: nightly
+          default: true
+
+      - name: Install Tools
+        run: |
+          cargo install cargo-fuzz --locked || echo "cargo-fuzz install failed"
+          cargo install cargo-outdated --locked || echo "cargo-outdated install failed"
+          cargo install cargo-udeps --locked  || echo "cargo-udeps install failed"
+
+      - name: Debug Build & Unit Tests
+        run: cargo test
+
+      - name: Fuzz Tests
+        run: |
+          # fuzz_targets/*.rs が存在するかどうかを compgen でチェック
+          if compgen -G "fuzz/fuzz_targets/*.rs" > /dev/null; then
+            for target in fuzz/fuzz_targets/*.rs; do
+              name=$(basename "$target" .rs)
+              echo "Running fuzz target: $name"
+              cargo fuzz run "$name" -- -max_total_time=10
+            done
+          else
+            echo "No fuzz targets found."
+          fi
+
+      - name: Benchmarks
+        run: cargo bench || (echo "❌ Benchmarks failed on CI" && exit 1)
+
+      - name: Check for Outdated Dependencies
+        run: |
+          cargo outdated --exit-code 1 || (echo "❌ Dependencies are outdated!" && exit 1)
+
+      - name: Unused Dependencies
+        run: cargo udeps || (echo "❌ Unused dependencies detected!" && exit 1)
