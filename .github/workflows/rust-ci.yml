@@ -3,6 +3,9 @@ name: Rust CI (stable + nightly)
 on:
   workflow_dispatch:
   workflow_call:
+    secrets:
+      GH_PAT:
+        required: true
 
 jobs:
   stable-ci:
