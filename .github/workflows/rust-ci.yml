@@ -47,6 +47,12 @@ jobs:
       - name: Rustdoc
         run: cargo doc --no-deps
 
+      - name: Install cargo-audit
+        run: cargo install cargo-audit --locked
+
+      - name: Security Audit
+        run: cargo audit || (echo "❌ Vulnerabilities found!" && exit 1)
+
   nightly-ci:
     name: Extra tests with nightly
     runs-on: ubuntu-latest
@@ -81,7 +87,6 @@ jobs:
 
       - name: Fuzz Tests
         run: |
-          # fuzz_targets/*.rs が存在するかどうかを compgen でチェック
           if compgen -G "fuzz/fuzz_targets/*.rs" > /dev/null; then
             for target in fuzz/fuzz_targets/*.rs; do
               name=$(basename "$target" .rs)
