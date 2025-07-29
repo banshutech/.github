@@ -42,6 +42,12 @@ jobs:
           default: true
           components: clippy, rustfmt
 
+      - name: Install cargo-binstall
+        run: curl -sSf https://raw.githubusercontent.com/cargo-bins/cargo-binstall/main/install-from-binstall-release.sh | bash
+
+      - name: Install cargo-audit via binstall
+        run: cargo binstall cargo-audit --no-confirm --locked
+
       - name: Format Check
         run: cargo fmt --check
 
@@ -59,9 +65,6 @@ jobs:
 
       - name: Rustdoc
         run: cargo doc --no-deps
-
-      - name: Install cargo-audit
-        run: cargo install cargo-audit --locked
 
       - name: Security Audit
         run: cargo audit || (echo "❌ Vulnerabilities found!" && exit 1)
@@ -99,11 +102,12 @@ jobs:
           toolchain: nightly
           default: true
 
-      - name: Install Tools
+      - name: Install cargo-binstall
+        run: curl -sSf https://raw.githubusercontent.com/cargo-bins/cargo-binstall/main/install-from-binstall-release.sh | bash
+
+      - name: Install Tools via binstall
         run: |
-          cargo install cargo-fuzz --locked || echo "cargo-fuzz install failed"
-          cargo install cargo-outdated --locked || echo "cargo-outdated install failed"
-          cargo install cargo-udeps --locked  || echo "cargo-udeps install failed"
+          cargo binstall cargo-fuzz cargo-outdated cargo-udeps --no-confirm --locked
 
       - name: Debug Build & Unit Tests
         run: cargo test
