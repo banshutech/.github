@@ -28,10 +28,11 @@ jobs:
       - uses: actions/cache@v3
         with:
           path: |
+            ~/.cargo/bin
             ~/.cargo/registry
             ~/.cargo/git
             target/stable
-          key: ${{ runner.os }}-cargo-stable-${{ hashFiles('**/Cargo.lock') }}
+          key: ${{ runner.os }}-cargo-stable-${{ hashFiles('**/Cargo.lock', 'ci-tool-versions.txt') }}
           restore-keys: |
             ${{ runner.os }}-cargo-stable-
 
@@ -85,10 +86,11 @@ jobs:
       - uses: actions/cache@v3
         with:
           path: |
+            ~/.cargo/bin
             ~/.cargo/registry
             ~/.cargo/git
             target/nightly
-          key: ${{ runner.os }}-cargo-nightly-${{ hashFiles('**/Cargo.lock') }}
+          key: ${{ runner.os }}-cargo-nightly-${{ hashFiles('**/Cargo.lock', 'ci-tool-versions.txt') }}
           restore-keys: |
             ${{ runner.os }}-cargo-nightly-
 
