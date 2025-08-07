@@ -48,6 +48,9 @@ jobs:
       - name: Install cargo-audit via binstall
         run: cargo binstall cargo-audit --no-confirm --locked
 
+      - name: Install typeshare-cli
+        run: cargo install typeshare-cli --locked
+
       - name: Format Check
         run: cargo fmt --check
 
