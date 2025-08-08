@@ -49,7 +49,7 @@ jobs:
         run: cargo binstall cargo-audit --no-confirm --locked
 
       - name: Install typeshare-cli
-        run: cargo install typeshare-cli --locked
+        run: cargo bininstall typeshare-cli --locked
 
       - name: Format Check
         run: cargo fmt --check
@@ -110,7 +110,7 @@ jobs:
 
       - name: Install Tools via binstall
         run: |
-          cargo binstall cargo-fuzz cargo-outdated cargo-udeps --no-confirm --locked
+          cargo binstall cargo-fuzz cargo-outdated cargo-udeps typeshare-cli --no-confirm --locked
 
       - name: Debug Build & Unit Tests
         run: cargo test
