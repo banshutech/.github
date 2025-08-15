@@ -51,6 +51,9 @@ jobs:
       - name: Install typeshare-cli
         run: cargo binstall typeshare-cli --locked
 
+      - name: version check
+        run: rustc --version && cargo clippy --version
+
       - name: Format Check
         run: cargo fmt --check
 
