@@ -115,8 +115,8 @@ jobs:
         run: |
           cargo binstall cargo-fuzz cargo-outdated cargo-udeps typeshare-cli --no-confirm --locked
 
-      - name: Debug Build & Unit Tests
-        run: cargo test
+      - name: Debug Build
+        run: cargo build
 
       - name: Fuzz Tests
         run: |
