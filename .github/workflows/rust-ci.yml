@@ -52,7 +52,7 @@ jobs:
         run: cargo binstall typeshare-cli --locked
 
       - name: Install nextest
-        run: cargo binstall nextest --no-confirm --locked
+        run: cargo binstall cargo-nextest --no-confirm --locked
 
       - name: version check
         run: rustc --version && cargo clippy --version
