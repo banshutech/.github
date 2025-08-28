@@ -49,10 +49,10 @@ jobs:
         run: cargo binstall cargo-audit --no-confirm --locked --force
 
       - name: Install typeshare-cli
-        run: cargo binstall typeshare-cli --locked
+        run: cargo binstall typeshare-cli --locked --force
 
       - name: Install nextest
-        run: cargo binstall cargo-nextest --no-confirm --locked
+        run: cargo binstall cargo-nextest --no-confirm --locked --force
 
       - name: version check
         run: rustc --version && cargo clippy --version
@@ -116,7 +116,7 @@ jobs:
 
       - name: Install Tools via binstall
         run: |
-          cargo binstall cargo-fuzz cargo-outdated cargo-udeps typeshare-cli --no-confirm --locked
+          cargo binstall cargo-fuzz cargo-outdated cargo-udeps typeshare-cli --no-confirm --locked --force
 
       - name: Debug Build
         run: cargo build --locked
