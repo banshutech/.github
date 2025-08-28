@@ -51,9 +51,6 @@ jobs:
       - name: Install typeshare-cli
         run: cargo binstall typeshare-cli --locked --force
 
-      - name: Install nextest
-        run: cargo binstall cargo-nextest --no-confirm --locked --force
-
       - name: version check
         run: rustc --version && cargo clippy --version
 
@@ -70,7 +67,7 @@ jobs:
         run: cargo build --locked
 
       - name: Unit Tests
-        run: cargo nextest run --locked
+        run: cargo test --locked
 
       - name: Rustdoc
         run: cargo doc --no-deps --locked
