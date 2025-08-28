@@ -61,7 +61,7 @@ jobs:
         run: cargo fmt --check
 
       - name: Clippy Lint
-        run: cargo clippy -- -D warnings --locked
+        run: cargo clippy -- -D warnings
 
       - name: Doctest
         run: cargo test --doc --locked
