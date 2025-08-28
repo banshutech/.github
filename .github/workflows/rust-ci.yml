@@ -46,7 +46,7 @@ jobs:
         run: curl -sSf https://raw.githubusercontent.com/cargo-bins/cargo-binstall/main/install-from-binstall-release.sh | bash
 
       - name: Install cargo-audit via binstall
-        run: cargo binstall cargo-audit --no-confirm --locked
+        run: cargo binstall cargo-audit --no-confirm --locked --force
 
       - name: Install typeshare-cli
         run: cargo binstall typeshare-cli --locked
