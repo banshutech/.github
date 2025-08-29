@@ -58,7 +58,7 @@ jobs:
         run: cargo fmt --check
 
       - name: Clippy Lint
-        run: cargo clippy -- -D warnings
+        run: cargo clippy --workspace --all-targets --all-features -- -D warnings
 
       - name: Doctest
         run: cargo test --doc --locked
